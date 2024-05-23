@@ -67,10 +67,80 @@ SELECT *, COUNT(product_id) AS total_product_purchases
 FROM customer_purchases
 GROUP BY product_id, customer_id, market_date;
 
-/* If we just want to summarize how much items with the same product_id have been purchased in total
+/* Yev's comment #2: If we just want to summarize how much items with the same product_id have been purchased in total
 by each customer, we may run the below query. It will output the total number of times a particular product 
 has been purchased by a customer.*/
 
 SELECT *, COUNT(product_id) AS total_product_purchases
 FROM customer_purchases
 GROUP BY product_id, customer_id;
+
+
+-- String manipulations
+/* 1. Some product names in the product table have descriptions like "Jar" or "Organic". 
+These are separated from the product name with a hyphen. 
+Create a column using SUBSTR (and a couple of other commands) that captures these, but is otherwise NULL. 
+Remove any trailing or leading whitespaces. Don't just use a case statement for each product! 
+
+| product_name               | description |
+|----------------------------|-------------|
+| Habanero Peppers - Organic | Organic     |
+
+Hint: you might need to use INSTR(product_name,'-') to find the hyphens. INSTR will help split the column. */
+
+
+SELECT *,
+CASE 
+        WHEN INSTR(product_name, "-" ) > 0 THEN TRIM(SUBSTR(product_name, INSTR(product_name, "-") + 1))
+        ELSE NULL
+    END AS description
+FROM product;
+
+
+/* 2. Filter the query to show any product_size value that contain a number with REGEXP. */
+
+SELECT * FROM product
+WHERE product_size REGEXP "[0-9]";
+
+-- UNION
+/* 1. Using a UNION, write a query that displays the market dates with the highest and lowest total sales.
+
+HINT: There are a possibly a few ways to do this query, but if you're struggling, try the following: 
+1) Create a CTE/Temp Table to find sales values grouped dates; 
+2) Create another CTE/Temp table with a rank windowed function on the previous query to create 
+"best day" and "worst day"; 
+3) Query the second temp table twice, once for the best day, once for the worst day, 
+with a UNION binding them. */
+
+WITH sales_by_date AS (
+	SELECT
+		market_date,
+		SUM(quantity * cost_to_customer_per_qty) AS total_sales
+	FROM customer_purchases
+	GROUP BY market_date),
+
+ranked_sales AS (
+	SELECT
+		market_date,
+        total_sales,
+        RANK() OVER (ORDER BY total_sales DESC) AS sales_rank_desc,
+        RANK() OVER (ORDER BY total_sales ASC) AS sales_rank_asc
+		FROM sales_by_date)
+
+SELECT
+	market_date,
+	total_sales,
+	"Highest sales date" AS day_type
+FROM ranked_sales
+WHERE sales_rank_desc = 1
+
+UNION
+
+SELECT
+	market_date,
+    total_sales,
+    'Lowest sales date' AS day_type
+FROM 
+    ranked_sales
+WHERE 
+    sales_rank_asc = 1;
