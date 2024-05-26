@@ -25,19 +25,27 @@ Bonus: Are there privacy implications to this, why or why not?
 In the SCD context, there are two commonly used architectures: Type 1 and Type 2.
 
 Type 1 - Retain Changes
-In a Type 1 architecture, changes to the customer address are not tracked. The table is updated directly with the new address information, and the old address is overwritten. This approach is simple and efficient but does not retain historical information about address changes.
+In a Type 1 architecture, changes to the customer address are not tracked. The table is updated directly with the new address information,
+and the old address is overwritten. This approach is simple and efficient but does not retain historical information about address changes.
 With this architecture, when a customer updates their address, the existing record in the table is simply replaced with the new address information.
 
-In a Type 2 architecture, changes to the customer address are tracked by creating new records in the table. Each record includes a timestamp or version number to indicate when the change occurred. This approach retains a history of address changes over time but can result in a larger database size.
-With this architecture, when a customer updates their address, a new record is inserted into the table with the updated address information and effective date. The expiration date of the previous address record can be set to indicate when it is no longer valid.
+In a Type 2 architecture, changes to the customer address are tracked by creating new records in the table. Each record includes a timestamp or
+version number to indicate when the change occurred. This approach retains a history of address changes over time but can result in a larger database size.
+With this architecture, when a customer updates their address, a new record is inserted into the table with the updated address information and effective date.
+The expiration date of the previous address record can be set to indicate when it is no longer valid.
 
 From a privacy standpoint, both types can have some implications.
 
-In Type 1, old address information is overwritten, so there is no historical record of changes. This means that if there is a need to audit or track changes for any reason, that information is lost. However, from a privacy perspective, this approach may be preferable because it ensures that outdated address information is not retained in the database.
+In Type 1, old address information is overwritten, so there is no historical record of changes. This means that if there is a need to audit or track
+changes for any reason, that information is lost. However, from a privacy perspective, this approach may be preferable because it ensures that outdated
+address information is not retained in the database.
 
-In Type 2, historical address information is retained, which provides a complete audit trail of address changes over time. While this can be useful for analysis and auditing purposes, it also means that old address information is stored indefinitely in the database, potentially increasing privacy risks if the database is compromised.
+In Type 2, historical address information is retained, which provides a complete audit trail of address changes over time. While this can be useful
+for analysis and auditing purposes, it also means that old address information is stored indefinitely in the database, potentially increasing privacy
+risks if the database is compromised.
 
-Ultimately, the choice between Type 1 and Type 2 architectures depends on factors such as regulatory requirements, data retention policies, and the balance between data utility and privacy concerns.
+Ultimately, the choice between Type 1 and Type 2 architectures depends on factors such as regulatory requirements, data retention policies, and the
+balance between data utility and privacy concerns.
 
 ```
 
@@ -48,9 +56,11 @@ Highlight at least two differences between it and your ERD. Would you change any
 ```
 I'd certainly make quite a few changes to mine :)
 
-The first main difference lies in the level of detalization. The AdventureWorks Schema is quite extensive. The model is visually broken down by business function, allowing for the recording and tracking of a wide variety of data, considering the business context and its future usage.
+The first main difference lies in the level of detalization. The AdventureWorks Schema is quite extensive. The model is visually broken down by business
+function, allowing for the recording and tracking of a wide variety of data, considering the business context and its future usage.
 
-The second notable difference is that each table has a ModifiedDate column, enabling the monitoring of amendments made to data in each table. Referring to Question 3 above, I'd assume that it may be the case that the SCD Type 2 is being utilized across the entire database to track historical data.
+The second notable difference is that each table has a ModifiedDate column, enabling the monitoring of amendments made to data in each table.
+Referring to Question 3 above, I'd assume that it may be the case that the SCD Type 2 is being utilized across the entire database to track historical data.
 
 The third distinctive difference is the presence of a database owner table in the schema, which stores database logs and technical details.
 
@@ -74,9 +84,9 @@ The third distinctive difference is the presence of a database owner table in th
     * Open a private window in your browser. Copy and paste the link to your pull request into the address bar. Make sure you can see your pull request properly. This helps the technical facilitator and learning support staff review your submission easily.
 
 Checklist:
-- [ ] Create a branch called `model-design`.
-- [ ] Ensure that the repository is public.
-- [ ] Review [the PR description guidelines](https://github.com/UofT-DSI/onboarding/blob/main/onboarding_documents/submissions.md#guidelines-for-pull-request-descriptions) and adhere to them.
-- [ ] Verify that the link is accessible in a private browser window.
+- [X] Create a branch called `model-design`.
+- [X] Ensure that the repository is public.
+- [X] Review [the PR description guidelines](https://github.com/UofT-DSI/onboarding/blob/main/onboarding_documents/submissions.md#guidelines-for-pull-request-descriptions) and adhere to them.
+- [X] Verify that the link is accessible in a private browser window.
 
 If you encounter any difficulties or have questions, please don't hesitate to reach out to our team via our Slack at `#cohort-3-help`. Our Technical Facilitators and Learning Support staff are here to help you navigate any challenges.
